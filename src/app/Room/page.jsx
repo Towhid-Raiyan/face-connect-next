@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import { useEffect, useRef } from 'react';
 import { ZegoUIKitPrebuilt } from '@zegocloud/zego-uikit-prebuilt';
 
@@ -17,7 +16,7 @@ function randomID(len) {
 }
 
 export function getUrlParams(
-  url = window.location.href
+  url = typeof window !== 'undefined' ? window.location.href : ''
 ) {
   let urlStr = url.split('?')[1];
   return new URLSearchParams(urlStr);
@@ -29,39 +28,41 @@ export default function VideoCall() {
 
   useEffect(() => {
     async function startVideoCall() {
-      // Generate Kit Token
-      const appID = 658986879;
-      const serverSecret = "84b1cb33a6b72b91bc1a7a42d5b2013f";
-      const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
-        appID,
-        serverSecret,
-        roomID,
-        randomID(5),
-        randomID(5)
-      );
+      if (typeof window !== 'undefined') { // Check if running in a browser environment
+        // Generate Kit Token
+        const appID = 658986879;
+        const serverSecret = "84b1cb33a6b72b91bc1a7a42d5b2013f";
+        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+          appID,
+          serverSecret,
+          roomID,
+          randomID(5),
+          randomID(5)
+        );
 
-      // Create instance object from Kit Token
-      const zp = ZegoUIKitPrebuilt.create(kitToken);
+        // Create instance object from Kit Token
+        const zp = ZegoUIKitPrebuilt.create(kitToken);
 
-      // Start the call
-      zp.joinRoom({
-        container: containerRef.current,
-        sharedLinks: [
-          {
-            name: 'Personal link',
-            url:
-              window.location.protocol +
-              '//' +
-              window.location.host +
-              window.location.pathname +
-              '?roomID=' +
-              roomID,
+        // Start the call
+        zp.joinRoom({
+          container: containerRef.current,
+          sharedLinks: [
+            {
+              name: 'Personal link',
+              url:
+                window.location.protocol +
+                '//' +
+                window.location.host +
+                window.location.pathname +
+                '?roomID=' +
+                roomID,
+            },
+          ],
+          scenario: {
+            mode: ZegoUIKitPrebuilt.GroupCall, // To implement 1-on-1 calls, modify the parameter here to [ZegoUIKitPrebuilt.OneONoneCall].
           },
-        ],
-        scenario: {
-          mode: ZegoUIKitPrebuilt.GroupCall, // To implement 1-on-1 calls, modify the parameter here to [ZegoUIKitPrebuilt.OneONoneCall].
-        },
-      });
+        });
+      }
     }
 
     startVideoCall();
@@ -75,6 +76,3 @@ export default function VideoCall() {
     ></div>
   );
 }
-
-
-
