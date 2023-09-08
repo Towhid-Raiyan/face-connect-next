@@ -196,7 +196,7 @@ export default function VideoCall() {
         const { ZegoUIKitPrebuilt } = await import('@zegocloud/zego-uikit-prebuilt');
 
         // Replace these with your actual appID and serverSecret
-        const appID = 658986879;
+        const appID = "658986879";
         const serverSecret = '84b1cb33a6b72b91bc1a7a42d5b2013f';
 
         // Generate the Zego token
