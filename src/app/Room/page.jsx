@@ -192,15 +192,17 @@ export default function VideoCall() {
       if (process.browser) {
         // Check if running in the browser environment
 
-        // Load ZegoUIKitPrebuilt dynamically
-        const { ZegoUIKitPrebuilt } = await import('@zegocloud/zego-uikit-prebuilt');
+        // Load ZegoUIKitPrebuilt dynamically with noSSR option
+        const ZegoUIKitPrebuilt = dynamic(() =>
+          import('@zegocloud/zego-uikit-prebuilt')
+        , { ssr: false });
 
         // Replace these with your actual appID and serverSecret
-        const appID = "658986879";
+        const appID = 658986879;
         const serverSecret = '84b1cb33a6b72b91bc1a7a42d5b2013f';
 
         // Generate the Zego token
-        const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
+        const kitToken = await ZegoUIKitPrebuilt.generateKitTokenForTest(
           appID,
           serverSecret,
           roomID,
@@ -243,6 +245,7 @@ export default function VideoCall() {
     ></div>
   );
 }
+
 
 
 
